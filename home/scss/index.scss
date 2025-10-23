@@ -74,6 +74,10 @@ img {
     display: flex;
     gap: 1rem;
 
+    .menu-toggle {
+      display: none;
+    }
+
     i {
       font-size: 1.2rem;
       cursor: pointer;
@@ -109,10 +113,11 @@ img {
   }
 
   .cart-modal {
+    font-family: "Poppins", sans-serif;
     position: absolute;
     top: 40px;
     right: 0;
-    width: 320px;
+    width: 450px;
     background: #fff;
     color: #111;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
@@ -123,6 +128,55 @@ img {
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.25s ease-in-out;
+
+    &.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    // ============ Responsive ============
+
+    @media (max-width: 768px) {
+      position: fixed;
+      top: 65px; // nằm dưới header
+      right: 0;
+      left: 0;
+      margin: 0 auto;
+      width: 95%;
+      max-height: 80vh;
+      overflow-y: auto;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+    }
+
+    @media (max-width: 480px) {
+      width: 96%;
+      top: 60px;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    @media (min-width: 769px) {
+
+      &:hover .cart-modal,
+      .cart-modal:hover {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+    }
+
+    &.active {
+      .cart-modal {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+    }
 
     h4 {
       margin-bottom: 10px;
@@ -137,11 +191,13 @@ img {
       margin: 0;
       max-height: 250px;
       overflow-y: auto;
+      width: 100%;
 
       li {
         display: flex;
-        align-items: center;
-        margin-bottom: 12px;
+        align-items: center; // 👈 canh giữa theo chiều dọc
+        justify-content: space-between;
+        margin-bottom: 16px;
 
         img {
           width: 60px;
@@ -166,16 +222,22 @@ img {
 
           .cart-price {
             color: #0071e3;
+            font-weight: 400;
+          }
+
+          .cart-total {
+            color: #0071e3;
             font-weight: 600;
           }
         }
 
         .cart-updonw {
           display: flex;
+          flex-direction: row;
           align-items: center;
           justify-content: center;
-          gap: 4px;
-          height: 100%;
+          gap: 8px;
+          margin-right: 15px;
 
           .btn-qty {
             width: 32px;
@@ -204,12 +266,13 @@ img {
 
             &:hover {
               color: #d9363e;
+              transform: scale(1.1);
             }
           }
         }
-
       }
     }
+
 
     .cart-footer {
       border-top: 1px solid #eee;
@@ -219,8 +282,15 @@ img {
       align-items: flex-end;
       gap: 8px;
 
-      .cart-total {
-        margin: 0;
+      .cart-totalprice {
+        background: #eef5ff;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-weight: 700;
+        color: #005bb5;
+        font-size: 1rem;
+        display: inline-block;
+        margin-top: 4px;
       }
 
       .viewcart-footer {
@@ -232,7 +302,7 @@ img {
         width: 100%;
 
         .btn-view-cart {
-          flex: 1; // mỗi nút chiếm đều 50%
+          flex: 1;
           text-align: center;
           background-color: #0071e3;
           color: #fff;
@@ -250,20 +320,14 @@ img {
           }
         }
 
-        // nếu có <a> bọc nút
         a {
           flex: 1;
           text-decoration: none;
         }
       }
-
-
-
-
     }
   }
 
-  /* Hover icon hoặc modal đều hiển thị modal */
   &:hover .cart-modal,
   .cart-modal:hover {
     opacity: 1;
@@ -271,6 +335,7 @@ img {
     transform: translateY(0);
   }
 }
+
 
 
 
@@ -411,6 +476,7 @@ img {
 
     .card__image {
       overflow: hidden;
+      padding: 10px 5px 0px 5px;
 
       img {
         transition: transform 0.3s ease;
@@ -549,20 +615,7 @@ img {
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .hero__container {
-    flex-direction: column-reverse;
-    text-align: center;
-  }
 
-  .hero__image img {
-    max-width: 300px;
-  }
-
-  .menu {
-    display: none;
-  }
-}
 
 
 
@@ -619,4 +672,101 @@ img {
 
 .cd-top--fade-out {
   opacity: 0.5;
+}
+
+/* ===== RESPONSIVE ENHANCEMENTS ===== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .products__content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero__content .hero__title {
+    font-size: 2rem;
+  }
+
+  .footer__links,
+  .footer__social {
+    padding-left: 0;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .header {
+    position: relative;
+    z-index: 1000;
+
+    .header__container {
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .header__icons {
+
+      .menu-toggle {
+        display: block;
+        font-size: 1.8rem;
+        color: #0071e3;
+        cursor: pointer;
+      }
+
+
+      .cart-icon {}
+
+    }
+
+
+    .menu {
+      flex-direction: column;
+      background: #fff;
+      position: absolute;
+      top: 60px; // nằm ngay dưới header
+      left: 0;
+      width: 100%;
+      border-top: 1px solid #eee;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+
+      // hiệu ứng trượt
+      max-height: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+
+      a {
+        padding: 12px 20px;
+        border-bottom: 1px solid #f5f5f5;
+        text-align: left;
+
+        &:hover {
+          background-color: #eef5ff;
+        }
+      }
+
+      &.show {
+        max-height: 400px; // đủ cao cho menu dài
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
+}
+
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .hero__content .hero__title {
+    font-size: 1.5rem;
+  }
+
+  .hero__buttons button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .card__body {
+    padding: 0.8rem;
+  }
 }

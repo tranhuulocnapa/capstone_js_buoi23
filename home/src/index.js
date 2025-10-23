@@ -112,24 +112,26 @@ const hanlecart = (product) => {
     const cartItem = createCartItem(product)
 
 
-    let found = false;
+    let isValid = false;
 
     for (let i = 0; i < cart.length; i++) {
         const element = cart[i];
         if (element.id === cartItem.id) {
             element.qty += 1;
-            found = true;
+            isValid = true;
             break;
         }
     }
 
 
-    if (!found) {
+    if (!isValid) {
         cart.push(cartItem);
     }
 
 
     rendermodalcart(cart)
+    setlocalStorage()
+
 
     // rendercart(cart)
 }
@@ -146,15 +148,18 @@ const rendermodalcart = (data) => {
         cart += `
             <li>
                 <img src=${product.img} alt=${product.type} />
+                
                 <div class="cart-info">
-                  <p class="cart-name">${product.name}</p>
-                  <p class="cart-qty">Số lượng: ${product.qty}</p>
-                  <p class="cart-price">${Number(product.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                    <p class="cart-name">${product.name}</p>
+                    <p class="cart-qty">Số lượng: ${product.qty}</p>
+                    <p class="cart-price">${Number(product.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                    <p class="cart-total">Thành tiền: ${(product.qty * product.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                 </div>
+
                 <div class="cart-updonw">
-                    <button class="btn-qty" onclick='hanledonwcart(${product.id})'>-</button>
-                    <button class="btn-qty" onclick='hanleupcart(${product.id})'>+</button>
-                    <i class="fa fa-trash remove-item" onclick='hanleremovecart(${product.id})'></i>
+                    <button class="btn-qty" onclick='hanledonwcart("${product.id}")'>-</button>
+                    <button class="btn-qty" onclick='hanleupcart("${product.id}")'>+</button>
+                    <i class="fa fa-trash remove-item" onclick='hanleremovecart("${product.id}")'></i>
                 </div>
             </li>
         `
@@ -164,12 +169,12 @@ const rendermodalcart = (data) => {
     let totalprice = 0;
     for (let i = 0; i < data.length; i++) {
         const product = data[i];
-        totalprice += product.price
+        totalprice += product.price * product.qty
     }
 
     document.getElementById("totalprice").innerHTML =
         `
-            Tổng: <strong>${Number(totalprice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</strong>
+        Tổng tiền: ${Number(totalprice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
         `
     let totalqty = 0;
     for (let i = 0; i < data.length; i++) {
@@ -177,25 +182,129 @@ const rendermodalcart = (data) => {
         totalqty += product.qty
     }
 
-    document.getElementById("totalqty").innerHTML = `
-    <span class="cart-count">${totalqty}</span>
-    `
+    //reset lại
+    document.getElementById("totalqty").innerHTML = "";
+
+
+    //nếu lớn hơn 0 thì chạy
+    if (totalqty > 0) {
+        document.getElementById("totalqty").innerHTML = `
+            <span class="cart-count">${totalqty}</span>
+            `
+    }
+
+
 }
+
+
+// lưu vào localStorage
+
+const setlocalStorage = () => {
+    const localStorageCart = JSON.stringify(cart);
+
+    localStorage.setItem("cart", localStorageCart);
+}
+
+// lấy dữ liệu ra ngoài
+const getlocalStorage = () => {
+    const localStorageCart = localStorage.getItem("cart");
+
+    const datalocalStorageCart = localStorageCart ? JSON.parse(localStorageCart) : [];
+
+    cart = datalocalStorageCart;
+
+    rendermodalcart(cart);
+}
+
+getlocalStorage();
+
 
 //tăng giảm cart
 
 const hanledonwcart = (id) => {
-    console.log(id);
+
+    for (let i = 0; i < cart.length; i++) {
+        const element = cart[i];
+
+        if (id === element.id) {
+            element.qty -= 1;
+        }
+
+        if (element.qty <= 0) {
+            cart.splice(i, 1);
+        }
+
+    }
+    setlocalStorage()
+    rendermodalcart(cart)
 }
 window.hanledonwcart = hanledonwcart;
 
 
 const hanleupcart = (id) => {
-    console.log(id);
+
+    for (let i = 0; i < cart.length; i++) {
+        const element = cart[i];
+
+        if (id === element.id) {
+            element.qty += 1;
+
+        }
+
+    }
+    setlocalStorage()
+    rendermodalcart(cart)
 }
 window.hanleupcart = hanleupcart;
 
+
 const hanleremovecart = (id) => {
-    console.log(id);
+    for (let i = 0; i < cart.length; i++) {
+        const element = cart[i];
+
+        if (id === element.id) {
+            cart.splice(i, 1);
+        }
+
+    }
+    setlocalStorage()
+    rendermodalcart(cart)
 }
 window.hanleremovecart = hanleremovecart;
+
+
+//reset lại giỏ hàng, nhấn nút thanh toán
+
+document.getElementById("cartpay").onclick = () => {
+
+    if (cart.length === 0) {
+        alert("Thanh toán không thành công! \nBạn chưa chọn sản phẩm nào")
+        return
+    }
+
+
+    localStorage.removeItem("cart")
+    getlocalStorage();
+    alert("Thanh toán thành công! Giỏ hàng đã được làm mới.");
+}
+
+//show menu
+const menuToggle = document.querySelector('.menu-toggle');
+const menu = document.querySelector('.menu');
+
+// Khi click nút 3 gạch
+menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation(); // chặn sự kiện lan ra ngoài
+    menu.classList.toggle('show');
+});
+
+// Khi click ra ngoài menu → tắt menu
+document.addEventListener('click', (e) => {
+    // Nếu click không nằm trong menu và không phải là nút toggle
+    if (!menu.contains(e.target) && !menuToggle.contains(e.target)) {
+        menu.classList.remove('show');
+    }
+});
+
+
+
