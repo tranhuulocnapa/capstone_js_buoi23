@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giỏ hàng</title>
+    <link rel="stylesheet" href="../css/cart.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body>
+
+    <main class="cart-page fade-element">
+        <div class="container">
+            <h2 class="cart-title">Giỏ hàng của bạn</h2>
+
+            <div class="cart-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Tạm tính</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-body">
+
+
+                        <tr>
+                            <td class="product-info">
+                                <img src="https://cdn.tgdd.vn/Products/Images/42/114115/iphone-x-64gb-hh-600x600.jpg"
+                                    alt="iPhone X">
+                                <span>iPhone X</span>
+                            </td>
+                            <td class="price">10.000.000đ</td>
+                            <td class="quantity">
+                                <button class="btn-qty decrease">-</button>
+                                <input type="number" value="1" min="1">
+                                <button class="btn-qty increase">+</button>
+                            </td>
+                            <td class="subtotal">10.000.000đ</td>
+                            <td><i class="fa fa-trash remove-item"></i></td>
+                        </tr>
+
+                      
+
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cart-summary">
+                <h3>Tổng thanh toán</h3>
+                <p>Tổng tiền: <span id="total-price">10.000.000đ</span></p>
+                <button class="btn-checkout">Mua ngay</button>
+            </div>
+        </div>
+    </main>
+
+
+    <script type="module" src="./src/index.js"></script>
+
+</body>
+
+</html>
