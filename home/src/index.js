@@ -11,6 +11,7 @@ const getListproduct = () => {
         .then((result) => {
             renderlistproduct(result.data);
             filter(result.data);
+            console.log(result)
 
         })
         .catch((error) => {
