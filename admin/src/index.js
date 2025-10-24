@@ -6,7 +6,7 @@ const getlistproduct = () => {
 
     promise
         .then((result) => {
-            console.log(result.data)
+            // console.log(result.data)
             renderproduct(result.data)
 
         })
@@ -28,7 +28,7 @@ const renderproduct = (data) => {
         product += `
 
             <tr>
-                <td>${i+1}</td>
+                <td>${i + 1}</td>
                 <td>
                   <img src=${element.img} alt=${element.name}>
                 </td>
@@ -40,7 +40,7 @@ const renderproduct = (data) => {
                 <td>${element.desc}</td>
                 <td>${element.type}</td>
                 <td class="actions">
-                  <button class="btn-edit">
+                  <button class="btn-edit" data-modal-target="crud-modal" data-modal-toggle="crud-modal" onclick="dandleeditProduct(${element.id})">
                     <i class="fa-solid fa-pencil"></i>
                   </button>
                   <button class="btn-delete">
@@ -50,8 +50,16 @@ const renderproduct = (data) => {
             </tr>
 `
 
-        document.getElementById("product-list").innerHTML = product
     }
+    document.getElementById("product-list").innerHTML = product
+
+    //giúp Flowbite nhận diện các nút mới render
+    initFlowbite();
+}
+
+const dandleeditProduct = (id) => {
+    console.log(id)
+
 
 
 
@@ -59,8 +67,7 @@ const renderproduct = (data) => {
 }
 
 
-
-
+window.dandleeditProduct = dandleeditProduct
 
 
 
