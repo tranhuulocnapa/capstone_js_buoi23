@@ -1,7 +1,7 @@
 import Product from "./product.js";
 import Validate from "./validata.js"
 
-const validate = new Validate();
+const classvalidate = new Validate();
 
 
 const getlistproduct = () => {
@@ -17,11 +17,45 @@ const getlistproduct = () => {
 
         })
         .catch(() => {
-            console.log(result)
+            console.log()
 
         })
 }
 getlistproduct()
+
+
+const validation = (name, price, img, screen, backCamera, frontCamera, desc, type) => {
+    let isvalid = true;
+
+    //Tên sản phẩm: không để trống.
+    isvalid &= classvalidate.khongtrong(name, "tbname", "(*) Vui lòng nhập tên sản phẩm") &&
+        classvalidate.checkLength(name, "tbname", "(*) Tên sản phẩm tối đa 20 ký tự", 0, 20)
+
+    isvalid &= classvalidate.khongtrong(price, "tbprice", "(*) Vui lòng nhập giá sản phẩm") &&
+        classvalidate.checknumber(price, "tbprice", "(*) Vui lòng nhập số") &&
+        classvalidate.checksoduong(price, "tbprice", "(*) Vui lòng nhập số > 0")
+
+    isvalid &= classvalidate.khongtrong(img, "tbimg", "(*) Vui lòng nhập hình ảnh")
+
+    isvalid &= classvalidate.khongtrong(screen, "tbscreen", "(*) Vui lòng nhập màn hình") &&
+        classvalidate.checkLength(screen, "tbscreen", "(*) Màn hình tối đa 15 ký tự", 0, 15)
+
+    isvalid &= classvalidate.khongtrong(backCamera, "tbbackCamera", "(*) Vui lòng nhập camera sau") &&
+        classvalidate.checkLength(backCamera, "tbbackCamera", "(*) Camera sau tối đa 15 ký tự", 0, 15)
+
+    isvalid &= classvalidate.khongtrong(frontCamera, "tbfrontCamera", "(*) Vui lòng nhập camera trước") &&
+        classvalidate.checkLength(frontCamera, "tbfrontCamera", "(*) Camera trước tối đa 15 ký tự", 0, 15)
+
+    isvalid &= classvalidate.khongtrong(desc, "tbdesc", "(*) Vui lòng nhập mô tả") &&
+        classvalidate.checkLength(desc, "tbdesc", "(*) Mô tả sp tối đa 50 ký tự", 0, 50)
+
+    isvalid &= classvalidate.checkOption(type, "tbtype", "(*) Vui lòng nhập loại")
+
+
+    return isvalid
+}
+
+
 
 
 
@@ -157,6 +191,9 @@ const dandleupdateProduct = (id) => {
     const type = document.getElementById("category").value;
     const desc = document.getElementById("desc").value;
 
+    const isValid = validation(name, price, img, screen, backCamera, frontCamera, desc, "category");
+    if (!isValid) return;
+
     const sp = new Product(id, name, price, screen, backCamera, frontCamera, img, type, desc)
 
     updateproductid(sp);
@@ -221,12 +258,19 @@ const dandleaddProduct = () => {
     const type = document.getElementById("category").value;
     const desc = document.getElementById("desc").value;
 
+
+    // // Gọi và kiểm tra kết quả validation đúng cách
+    const isValid = validation(name, price, img, screen, backCamera, frontCamera, desc, "category");
+    if (!isValid) return;
+
     const sp = new Product("", name, price, screen, backCamera, frontCamera, img, type, desc)
 
-    if (!name || !price || !img || !type) {
-        alert("Vui lòng nhập đầy đủ thông tin bắt buộc!");
-        return;
-    }
+
+
+    // if (!name || !price || !img || !type) {
+    //     alert("Vui lòng nhập đầy đủ thông tin bắt buộc!");
+    //     return;
+    // }
 
 
     const promise = axios({
