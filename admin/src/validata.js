@@ -68,6 +68,7 @@ class Validate {
         document.getElementById(errorId).innerHTML = "";
         return true;
     }
+
 }
 
 export default Validate;

@@ -14,6 +14,7 @@ const getlistproduct = () => {
         .then((result) => {
             // console.log(result.data)
             renderproduct(result.data)
+            search(result.data)
 
         })
         .catch(() => {
@@ -133,7 +134,7 @@ const renderproduct = (data) => {
                   </button>
                 </td>
             </tr>
-`
+            `
 
     }
     document.getElementById("product-list").innerHTML = product
@@ -172,6 +173,11 @@ const dandleeditProduct = (id) => {
         </button>
 `
 
+    // Xóa toàn bộ thông báo lỗi (nếu có)
+    const errorMessages = document.querySelectorAll(".sp-thongbao");
+    errorMessages.forEach(el => el.innerText = "");  // hoặc el.textContent = ""
+
+
     getproductid(id)
 
 }
@@ -199,7 +205,6 @@ const dandleupdateProduct = (id) => {
     updateproductid(sp);
 
     document.getElementById("close_modal").click();
-
 
 }
 
@@ -246,6 +251,11 @@ document.getElementById("addproduct").onclick = () => {
             <span>Thêm sản phẩm mới</span>
         </button>
 `
+    document.getElementById("formmodal").reset()
+
+    // Xóa toàn bộ thông báo lỗi (nếu có)
+    const errorMessages = document.querySelectorAll(".sp-thongbao");
+    errorMessages.forEach(el => el.innerText = "");  // hoặc el.textContent = ""
 }
 
 const dandleaddProduct = () => {
@@ -292,8 +302,40 @@ const dandleaddProduct = () => {
 window.dandleaddProduct = dandleaddProduct;
 
 
+//search by name
+
+//hàm bỏ dấu tiếng việt
+const removeVietnameseTones = (str) => {
+    return str
+        .normalize("NFD") // tách dấu ra khỏi ký tự gốc
+        .replace(/[\u0300-\u036f]/g, "") // xóa dấu
+        .replace(/đ/g, "d")
+        .replace(/Đ/g, "D")
+        .toLowerCase(); // chuyển về chữ thường
+}
+
+const search = (arr) => {
+    document.getElementById("search-box").addEventListener("keyup", () => {
+        const keyword = document.getElementById("search-box").value;
+
+        let searchloai = [];
+
+        const keywordNormalized = removeVietnameseTones(keyword);
+
+        for (let i = 0; i < arr.length; i++) {
+            const phone = arr[i];
 
 
+            const loaiNormalized = removeVietnameseTones(phone.name);
+
+            if (loaiNormalized.indexOf(keywordNormalized) !== -1) {
+                searchloai.push(phone);
+            }
+        }
+
+        renderproduct(searchloai)
+    })
+}
 
 
 
