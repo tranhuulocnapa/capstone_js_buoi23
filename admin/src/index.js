@@ -1,3 +1,9 @@
+import Product from "./product.js";
+import Validate from "./validata.js"
+
+const validate = new Validate();
+
+
 const getlistproduct = () => {
     const promise = axios({
         url: "https://68f5f9ef6b852b1d6f15ab33.mockapi.io/product",
@@ -14,10 +20,55 @@ const getlistproduct = () => {
             console.log(result)
 
         })
-
-
 }
 getlistproduct()
+
+
+
+const getproductid = (id) => {
+    const promise = axios({
+        url: `https://68f5f9ef6b852b1d6f15ab33.mockapi.io/product/${id}`,
+        method: 'GET',
+    })
+
+    promise
+        .then((result) => {
+            const product = result.data
+            document.getElementById("name").value = product.name
+            document.getElementById("price").value = product.price
+            document.getElementById("category").value = product.type
+            document.getElementById("img").value = product.img
+            document.getElementById("screen").value = product.screen
+            document.getElementById("backCamera").value = product.backCamera
+            document.getElementById("frontCamera").value = product.frontCamera
+            document.getElementById("desc").value = product.desc
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+}
+
+const updateproductid = (product) => {
+    const promise = axios({
+        url: `https://68f5f9ef6b852b1d6f15ab33.mockapi.io/product/${product.id}`,
+        method: 'PUT',
+        data: product,
+    })
+
+    promise
+        .then((result) => {
+            console.log(result)
+            getlistproduct()
+
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+}
+
+
+
+
 
 const renderproduct = (data) => {
     let product = "";
@@ -43,7 +94,7 @@ const renderproduct = (data) => {
                   <button class="btn-edit" data-modal-target="crud-modal" data-modal-toggle="crud-modal" onclick="dandleeditProduct(${element.id})">
                     <i class="fa-solid fa-pencil"></i>
                   </button>
-                  <button class="btn-delete">
+                  <button class="btn-delete" onclick="dandledeletetProduct(${element.id})">
                     <i class="fas fa-trash"></i>
                   </button>
                 </td>
@@ -55,31 +106,146 @@ const renderproduct = (data) => {
 
     //giúp Flowbite nhận diện các nút mới render
     initFlowbite();
+
+    //fix lỗi
+    // 🩵 Tự động loại bỏ focus khi modal bị ẩn để tránh cảnh báo "locked aria-hidden..."
+    const observer = new MutationObserver(() => {
+        const active = document.activeElement;
+        if (active && active.closest("[aria-hidden='true']")) {
+            active.blur(); // bỏ focus khỏi phần tử bị ẩn
+        }
+    });
+
+    // Theo dõi toàn bộ body để phát hiện khi aria-hidden thay đổi (khi modal đóng)
+    observer.observe(document.body, { attributes: true, subtree: true });
+
 }
 
+
+//lấy dữ liệu ra khi nhấn nút cập nhật
 const dandleeditProduct = (id) => {
-    console.log(id)
+    // console.log(id)
+    document.getElementById("themsp").innerHTML = "Cập nhật sản phẩm"
 
+    document.getElementById("btn_footermodal").innerHTML = `
+        <button 
+                class="text-white inline-flex items-center gap-x-2 bg-blue-700 hover:bg-blue-800
+                        focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg
+                        text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700
+                        dark:focus:ring-blue-800" onclick="dandleupdateProduct(${id})" id="updateproduct">
+            <i class="fa-solid fa-pencil"></i>
+            <span>Cập nhật sản phẩm</span>
+        </button>
+`
 
-
-
+    getproductid(id)
 
 }
-
-
 window.dandleeditProduct = dandleeditProduct
 
 
+//cập nhật lại dữ liệu
+
+const dandleupdateProduct = (id) => {
+
+    const name = document.getElementById("name").value;
+    const price = document.getElementById("price").value;
+    const screen = document.getElementById("screen").value;
+    const backCamera = document.getElementById("backCamera").value;
+    const frontCamera = document.getElementById("frontCamera").value;
+    const img = document.getElementById("img").value;
+    const type = document.getElementById("category").value;
+    const desc = document.getElementById("desc").value;
+
+    const sp = new Product(id, name, price, screen, backCamera, frontCamera, img, type, desc)
+
+    updateproductid(sp);
+
+    document.getElementById("close_modal").click();
 
 
+}
 
 
+window.dandleupdateProduct = dandleupdateProduct;
+
+//delete product
+
+const dandledeletetProduct = (id) => {
+    const promise = axios({
+        url: `https://68f5f9ef6b852b1d6f15ab33.mockapi.io/product/${id}`,
+        method: 'DELETE',
+    })
+    promise
+        .then(() => {
+            getlistproduct()
+        })
+        .catch((result) => {
+            console.log(result)
+
+        })
+}
+window.dandledeletetProduct = dandledeletetProduct;
 
 
+//add product
+
+document.getElementById("addproduct").onclick = () => {
+
+    document.getElementById("themsp").innerHTML = "Thêm sản phẩm"
+
+    document.getElementById("btn_footermodal").innerHTML = `
+        <button 
+                class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800
+                        focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg
+                        text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700
+                        dark:focus:ring-blue-800" onclick="dandleaddProduct()">
+            <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                        clip-rule="evenodd"></path>
+            </svg>
+            <span>Thêm sản phẩm mới</span>
+        </button>
+`
+}
+
+const dandleaddProduct = () => {
+    const name = document.getElementById("name").value;
+    const price = document.getElementById("price").value;
+    const screen = document.getElementById("screen").value;
+    const backCamera = document.getElementById("backCamera").value;
+    const frontCamera = document.getElementById("frontCamera").value;
+    const img = document.getElementById("img").value;
+    const type = document.getElementById("category").value;
+    const desc = document.getElementById("desc").value;
+
+    const sp = new Product("", name, price, screen, backCamera, frontCamera, img, type, desc)
+
+    if (!name || !price || !img || !type) {
+        alert("Vui lòng nhập đầy đủ thông tin bắt buộc!");
+        return;
+    }
 
 
+    const promise = axios({
+        url: `https://68f5f9ef6b852b1d6f15ab33.mockapi.io/product`,
+        method: 'POST',
+        data: sp,
+    })
+    promise
+        .then(() => {
+            getlistproduct()
 
+        })
+        .catch((result) => {
+            console.log(result)
 
+        })
+    document.getElementById("close_modal").click();
+}
+window.dandleaddProduct = dandleaddProduct;
 
 
 
@@ -102,4 +268,9 @@ document.addEventListener("click", (e) => {
     if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
         sidebar.classList.remove("active");
     }
+});
+
+document.addEventListener("submit", function (e) {
+    e.preventDefault();
+    console.log("Form submit bị chặn để không reload trang");
 });
