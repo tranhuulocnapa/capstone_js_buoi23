@@ -147,7 +147,7 @@ button {
       border-radius: 6px;
       font-weight: 500;
       transition: 0.3s;
-      
+
 
       &:hover {
         background: #005bb5;
@@ -257,6 +257,7 @@ button {
 
   /* ✅ Responsive đẹp hơn */
   @media (max-width: 1024px) {
+
     th,
     td {
       padding: 10px 8px;
@@ -269,8 +270,10 @@ button {
   }
 
   @media (max-width: 768px) {
+
     th:nth-child(4),
-    td:nth-child(4), // Ẩn cột mô tả
+    td:nth-child(4),
+    // Ẩn cột mô tả
     th:nth-child(5),
     td:nth-child(5) {
       display: none;
@@ -343,4 +346,9 @@ button {
       width: 100%;
     }
   }
+}
+
+#crud-modal {
+  z-index: 9999 !important;
+  /* cao hơn header */
 }

@@ -302,4 +302,8 @@ button {
   .content-header .search-box input {
     width: 100%;
   }
+}
+#crud-modal {
+  z-index: 9999 !important;
+  /* cao hơn header */
 }/*# sourceMappingURL=index.css.map */

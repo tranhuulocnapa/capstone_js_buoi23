@@ -15,7 +15,9 @@ const getlistproduct = () => {
             // console.log(result.data)
             renderproduct(result.data)
             search(result.data)
-
+            document.getElementById("sortSelect").addEventListener("change", () => {
+                sortSelect(result.data);
+            });
         })
         .catch(() => {
             console.log()
@@ -338,7 +340,6 @@ const search = (arr) => {
 }
 
 
-
 // Toggle sidebar on mobile
 const toggle = document.querySelector(".menu-toggle");
 const sidebar = document.querySelector(".sidebar");
@@ -360,3 +361,54 @@ document.addEventListener("submit", function (e) {
     e.preventDefault();
     console.log("Form submit bị chặn để không reload trang");
 });
+
+
+
+//Sắp xếp sản phẩm theo giá tiền (từ lớn đến bé, và ngược lại)
+
+const sortSelect = (manggoc) => {
+    const sort = document.getElementById("sortSelect").value
+
+    const data = [...manggoc];
+
+    if (sort === "ascending") {
+        //sắp xếp tăng
+        for (let i = 0; i < data.length - 1; i++) {
+            for (let j = i + 1; j < data.length; j++) {
+
+                if (data[i].price > data[j].price) {
+                    let temp = data[i];
+                    data[i] = data[j]
+                    data[j] = temp
+                }
+            }
+
+        }
+
+    } else if (sort === "descending") {
+        //sắp xếp giảm
+        for (let i = 0; i < data.length - 1; i++) {
+            for (let j = i + 1; j < data.length; j++) {
+
+                if (data[i].price < data[j].price) {
+                    let temp = data[i];
+                    data[i] = data[j]
+                    data[j] = temp
+                }
+            }
+
+        }
+    } else if (sort === "none") {
+        renderproduct(manggoc)
+        return
+
+    }
+
+
+
+
+
+
+    renderproduct(data)
+
+}
