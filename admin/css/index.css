@@ -37,7 +37,7 @@ button {
 
 /* SIDEBAR */
 .sidebar {
-  width: 240px;
+  width: 180px;
   background: #0071e3;
   color: #fff;
   padding: 1.5rem 1rem;
@@ -80,7 +80,7 @@ button {
 /* MAIN */
 .main {
   flex: 1;
-  margin-left: 240px;
+  margin-left: 180px;
   display: flex;
   flex-direction: column;
 }
@@ -239,43 +239,6 @@ button {
     width: 50px;
   }
 }
-@media (max-width: 768px) {
-  .product-table th:nth-child(4),
-  .product-table td:nth-child(4),
-  .product-table th:nth-child(5),
-  .product-table td:nth-child(5) {
-    display: none;
-  }
-  .product-table th,
-  .product-table td {
-    padding: 8px 6px;
-    font-size: 12px;
-  }
-  .product-table td img {
-    width: 45px;
-  }
-}
-@media (max-width: 576px) {
-  .product-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-  .product-table th,
-  .product-table td {
-    font-size: 12px;
-    padding: 8px;
-  }
-  .product-table td img {
-    width: 40px;
-  }
-  .product-table .actions button {
-    font-size: 14px;
-  }
-  .product-table tr:hover {
-    background: transparent;
-  }
-}
 
 /* =========================
    RESPONSIVE
@@ -303,7 +266,302 @@ button {
     width: 100%;
   }
 }
+/* === RESPONSIVE: MOBILE ĐẸP HƠN === */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -180px;
+    z-index: 999;
+  }
+  .sidebar.active {
+    left: 0;
+  }
+  .main {
+    margin-left: 0;
+  }
+  /* Bảng cuộn ngang khi nhỏ */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .product-table {
+    min-width: 800px;
+    /* đảm bảo bảng không bị bóp quá nhỏ */
+    table-layout: auto;
+  }
+  .product-table th,
+  .product-table td {
+    padding: 8px;
+    font-size: 13px;
+    white-space: nowrap;
+    /* Giữ cột gọn, không dọc */
+  }
+  .product-table td img {
+    width: 45px;
+    height: 45px;
+  }
+}
+/* === MOBILE NHỎ (DƯỚI 480px) === */
+@media (max-width: 480px) {
+  .product-table {
+    font-size: 12px;
+    min-width: 700px;
+    /* cho phép cuộn ngang */
+  }
+  .table-container {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .content {
+    padding: 1rem;
+  }
+  .header {
+    padding: 0.8rem 1rem;
+  }
+  .header .user-info span {
+    display: none;
+    /* ẩn tên để tiết kiệm chỗ */
+  }
+}
 #crud-modal {
   z-index: 9999 !important;
   /* cao hơn header */
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+  /* Ngăn tràn ngang */
+}
+
+.admin-layout {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.sidebar {
+  flex-shrink: 0;
+  width: 180px;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  /* rất quan trọng để ngăn table làm tràn ngang */
+  margin-left: 180px;
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+  /* Cho phép cuộn nếu table quá rộng */
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  /* Cho phép table cuộn ngang riêng */
+}
+
+@media (max-width: 992px) {
+  .main {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+.main {
+  overflow-x: hidden;
+  /* Không cho cuộn ngang */
+}
+
+table {
+  table-layout: fixed;
+  /* Ép cột co đều */
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table td,
+table th {
+  text-overflow: ellipsis;
+  /* Thêm dấu ... nếu nội dung dài */
+  overflow: hidden;
+  white-space: nowrap;
+  /* Không xuống dòng */
+}
+
+td:nth-child(7),
+th:nth-child(7) {
+  max-width: 200px;
+  /* Giới hạn độ rộng cột */
+}
+
+.main {
+  overflow-x: hidden;
+  /* Ẩn thanh cuộn ngang */
+}
+
+table {
+  table-layout: fixed;
+  /* Ép cột co đều theo chiều rộng bảng */
+  width: 100%;
+  border-collapse: collapse;
+  word-wrap: break-word;
+  /* Cho phép xuống dòng khi cần */
+}
+
+table td,
+table th {
+  white-space: normal;
+  /* Cho phép xuống dòng */
+  word-break: break-word;
+  /* Ngắt từ khi dài quá */
+  overflow: visible;
+  /* Không ẩn phần chữ */
+  padding: 12px 15px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Giới hạn độ rộng riêng cho cột mô tả (tùy bạn) */
+td:nth-child(7),
+th:nth-child(7) {
+  max-width: 220px;
+}
+
+.main {
+  overflow-x: hidden;
+  /* Ẩn thanh cuộn ngang */
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Cho phép nội dung xuống dòng */
+.product-table td,
+.product-table th {
+  white-space: normal;
+  /* Cho phép xuống dòng */
+  word-wrap: break-word;
+  /* Ngắt từ nếu dài quá */
+  word-break: break-word;
+  /* Ngắt luôn nếu từ quá dài */
+  vertical-align: top;
+  /* Căn chữ trên cùng */
+  text-align: center;
+  padding: 12px 15px;
+}
+
+/* Giới hạn riêng cột mô tả */
+.product-table td:nth-child(7),
+.product-table th:nth-child(7) {
+  width: 220px;
+  /* ấn định độ rộng vừa đủ */
+  max-width: 220px;
+}
+
+/* Nếu cần cột "Loại" cũng có giới hạn */
+.product-table td:nth-child(8),
+.product-table th:nth-child(8) {
+  width: 120px;
+  max-width: 120px;
+}
+
+/* Bỏ table-layout: fixed để cột tự giãn hợp lý */
+.product-table {
+  table-layout: auto;
+}
+
+/* === TABLE GIỚI HẠN CỘT, CHỮ XUỐNG DÒNG === */
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.product-table th,
+.product-table td {
+  padding: 10px 12px;
+  font-size: 14px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: normal;
+  /* Cho phép xuống dòng */
+  word-break: break-word;
+  overflow: visible;
+}
+
+/* === Giới hạn độ rộng từng cột === */
+.product-table th:nth-child(1),
+.product-table td:nth-child(1) {
+  width: 60px;
+}
+
+/* STT */
+.product-table th:nth-child(2),
+.product-table td:nth-child(2) {
+  width: 80px;
+}
+
+/* Hình ảnh */
+.product-table th:nth-child(3),
+.product-table td:nth-child(3) {
+  width: 150px;
+}
+
+/* Tên sản phẩm */
+.product-table th:nth-child(4),
+.product-table td:nth-child(4) {
+  width: 90px;
+}
+
+/* Giá */
+.product-table th:nth-child(5),
+.product-table td:nth-child(5) {
+  width: 120px;
+}
+
+/* Màn hình */
+.product-table th:nth-child(6),
+.product-table td:nth-child(6) {
+  width: 120px;
+}
+
+/* Camera sau */
+.product-table th:nth-child(7),
+.product-table td:nth-child(7) {
+  width: 120px;
+}
+
+/* Camera trước */
+.product-table th:nth-child(8),
+.product-table td:nth-child(8) {
+  width: 200px;
+  max-width: 200px;
+}
+
+/* Mô tả */
+.product-table th:nth-child(9),
+.product-table td:nth-child(9) {
+  width: 100px;
+}
+
+/* Loại */
+.product-table th:nth-child(10),
+.product-table td:nth-child(10) {
+  width: 120px;
+}
+
+/* Thao tác */
+/* === ẢNH TRONG BẢNG === */
+.product-table td img {
+  width: 55px;
+  height: 55px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 8px;
 }/*# sourceMappingURL=index.css.map */
